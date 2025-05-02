@@ -1,0 +1,112 @@
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
+
+export interface Database {
+  public: {
+    Tables: {
+      profiles: {
+        Row: {
+          id: string
+          email: string | null
+          full_name: string | null
+          role: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id: string
+          email?: string | null
+          full_name?: string | null
+          role?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          email?: string | null
+          full_name?: string | null
+          role?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      news: {
+        Row: {
+          id: number
+          title: string
+          content: string
+          image_url: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          title: string
+          content: string
+          image_url?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          title?: string
+          content?: string
+          image_url?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      gallery: {
+        Row: {
+          id: number
+          title: string
+          description: string | null
+          image_url: string
+          created_at: string | null
+        }
+        Insert: {
+          id?: number
+          title: string
+          description?: string | null
+          image_url: string
+          created_at?: string | null
+        }
+        Update: {
+          id?: number
+          title?: string
+          description?: string | null
+          image_url?: string
+          created_at?: string | null
+        }
+      }
+      accounting_reports: {
+        Row: {
+          id: number
+          title: string
+          description: string | null
+          file_url: string | null
+          report_date: string
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          title: string
+          description?: string | null
+          file_url?: string | null
+          report_date: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          title?: string
+          description?: string | null
+          file_url?: string | null
+          report_date?: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+    }
+  }
+}
