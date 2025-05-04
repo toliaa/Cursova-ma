@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileText, Users, ImageIcon, Newspaper } from "lucide-react"
+import { redirect } from "next/navigation"
+import { StudentDashboardScholarships } from "@/components/dashboard/student-dashboard-scholarships"
+import { StudentDashboardAllowances } from "@/components/dashboard/student-dashboard-allowances"
+import { StudentDashboardCourses } from "@/components/dashboard/student-dashboard-courses"
 
 export default async function DashboardPage() {
   const supabase = createClient()
@@ -11,109 +13,35 @@ export default async function DashboardPage() {
   } = await supabase.auth.getSession()
 
   if (!session) {
-    return null
+    redirect("/auth")
   }
 
   // Get user profile with role
   const { data: profile } = await supabase.from("profiles").select("*").eq("id", session.user.id).single()
-
-  const userRole = profile?.role || "student"
-
-  // Get counts for admin dashboard
-  let newsCount = 0
-  let reportsCount = 0
-  let galleryCount = 0
-  let usersCount = 0
-
-  if (userRole === "admin") {
-    const [
-      { count: newsCountResult },
-      { count: reportsCountResult },
-      { count: galleryCountResult },
-      { count: usersCountResult },
-    ] = await Promise.all([
-      supabase.from("news").select("*", { count: "exact", head: true }),
-      supabase.from("accounting_reports").select("*", { count: "exact", head: true }),
-      supabase.from("gallery").select("*", { count: "exact", head: true }),
-      supabase.from("profiles").select("*", { count: "exact", head: true }),
-    ])
-
-    newsCount = newsCountResult || 0
-    reportsCount = reportsCountResult || 0
-    galleryCount = galleryCountResult || 0
-    usersCount = usersCountResult || 0
-  }
+  const isAdmin = profile?.role === "admin"
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back, {profile?.full_name || "User"}!</p>
-      </div>
+    <div className="container mx-auto py-6">
+      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
-      {userRole === "admin" ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total News</CardTitle>
-              <Newspaper className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{newsCount}</div>
-              <p className="text-xs text-muted-foreground">Published news articles</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Reports</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{reportsCount}</div>
-              <p className="text-xs text-muted-foreground">Financial reports available</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gallery Items</CardTitle>
-              <ImageIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{galleryCount}</div>
-              <p className="text-xs text-muted-foreground">Images in the gallery</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{usersCount}</div>
-              <p className="text-xs text-muted-foreground">Registered users</p>
-            </CardContent>
-          </Card>
+      {isAdmin ? (
+        <div className="grid gap-6">
+          <div className="p-6 bg-white rounded-lg shadow">
+            <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
+            <p className="text-gray-600">
+              Welcome to the admin dashboard. Use the navigation menu to manage users, courses, news, gallery, and
+              reports.
+            </p>
+          </div>
         </div>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Student Dashboard</CardTitle>
-              <CardDescription>Welcome to your student portal</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>This is the student dashboard. Here you can view your courses, grades, and financial information.</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Announcements</CardTitle>
-              <CardDescription>Stay updated with the latest news</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>No new announcements at this time.</p>
-            </CardContent>
-          </Card>
+        <div className="grid gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <StudentDashboardScholarships />
+            <StudentDashboardAllowances />
+          </div>
+
+          <StudentDashboardCourses />
         </div>
       )}
     </div>

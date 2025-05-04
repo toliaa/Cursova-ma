@@ -187,7 +187,7 @@ export interface Database {
           reason?: string | null
           status: string
           created_at?: string | null
-          updated_at?: string | null
+          updated_at: string | null
         }
         Update: {
           id?: number
@@ -223,7 +223,7 @@ export interface Database {
           status: string
           description?: string | null
           created_at?: string | null
-          updated_at?: string | null
+          updated_at: string | null
         }
         Update: {
           id?: number
@@ -276,16 +276,3 @@ export interface Database {
     }
   }
 }
-
-export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & { _: never })
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] & { _: never })
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] & { _: never })[TableName]["Row"]
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] & { _: never })
-    ? (Database["public"]["Tables"] & { _: never })[PublicTableNameOrOptions]["Row"]
-    : never
