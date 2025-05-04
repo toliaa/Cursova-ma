@@ -1,82 +1,100 @@
 "use client"
 
-import type React from "react"
-
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import {
+  type LucideIcon,
+  LayoutDashboard,
+  Users,
+  Newspaper,
+  ImageIcon,
+  FileText,
+  Settings,
+  GraduationCap,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, FileText, Users, Settings, ImageIcon, Newspaper } from "lucide-react"
+import { buttonVariants } from "@/components/ui/button"
 
 interface NavItem {
   title: string
   href: string
-  icon: React.ReactNode
-  roles: string[]
+  icon: LucideIcon
+  roles?: string[]
 }
 
-const items: NavItem[] = [
-  {
-    title: "Overview",
-    href: "/dashboard",
-    icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
-    roles: ["admin", "student", "teacher"],
-  },
-  {
-    title: "Reports",
-    href: "/dashboard/reports",
-    icon: <FileText className="mr-2 h-4 w-4" />,
-    roles: ["admin", "teacher"],
-  },
-  {
-    title: "Users",
-    href: "/dashboard/users",
-    icon: <Users className="mr-2 h-4 w-4" />,
-    roles: ["admin"],
-  },
-  {
-    title: "News Management",
-    href: "/dashboard/news",
-    icon: <Newspaper className="mr-2 h-4 w-4" />,
-    roles: ["admin"],
-  },
-  {
-    title: "Gallery Management",
-    href: "/dashboard/gallery",
-    icon: <ImageIcon className="mr-2 h-4 w-4" />,
-    roles: ["admin"],
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: <Settings className="mr-2 h-4 w-4" />,
-    roles: ["admin", "student", "teacher"],
-  },
-]
-
 interface DashboardNavProps {
-  userRole: string
+  userRole?: string | null
 }
 
 export function DashboardNav({ userRole }: DashboardNavProps) {
   const pathname = usePathname()
 
-  const filteredItems = items.filter((item) => item.roles.includes(userRole))
+  const navItems: NavItem[] = [
+    {
+      title: "Overview",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Users",
+      href: "/dashboard/users",
+      icon: Users,
+      roles: ["admin"],
+    },
+    {
+      title: "News",
+      href: "/dashboard/news",
+      icon: Newspaper,
+      roles: ["admin"],
+    },
+    {
+      title: "Gallery",
+      href: "/dashboard/gallery",
+      icon: ImageIcon,
+      roles: ["admin"],
+    },
+    {
+      title: "Reports",
+      href: "/dashboard/reports",
+      icon: FileText,
+      roles: ["admin", "teacher"],
+    },
+    {
+      title: "Courses",
+      href: "/dashboard/courses",
+      icon: GraduationCap,
+      roles: ["admin"],
+    },
+    {
+      title: "Settings",
+      href: "/dashboard/settings",
+      icon: Settings,
+    },
+  ]
 
   return (
-    <nav className="grid items-start gap-2">
-      {filteredItems.map((item, index) => (
-        <Link key={index} href={item.href}>
-          <span
+    <nav className="grid gap-2 px-2">
+      {navItems.map((item) => {
+        // Check if the item should be shown based on user role
+        if (item.roles && userRole && !item.roles.includes(userRole)) {
+          return null
+        }
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
             className={cn(
-              "group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-              pathname === item.href ? "bg-accent" : "transparent",
+              buttonVariants({ variant: "ghost" }),
+              pathname === item.href ? "bg-muted hover:bg-muted" : "hover:bg-transparent hover:underline",
+              "justify-start",
             )}
           >
-            {item.icon}
-            <span>{item.title}</span>
-          </span>
-        </Link>
-      ))}
+            <item.icon className="mr-2 h-4 w-4" />
+            {item.title}
+          </Link>
+        )
+      })}
     </nav>
   )
 }

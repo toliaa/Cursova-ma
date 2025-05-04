@@ -107,6 +107,172 @@ export interface Database {
           updated_at?: string | null
         }
       }
+      courses: {
+        Row: {
+          id: number
+          title: string
+          description: string | null
+          credits: number
+          course_code: string
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          title: string
+          description?: string | null
+          credits: number
+          course_code: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          title?: string
+          description?: string | null
+          credits?: number
+          course_code?: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      student_courses: {
+        Row: {
+          id: number
+          student_id: string
+          course_id: number
+          enrollment_date: string
+          status: string
+          grade: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          student_id: string
+          course_id: number
+          enrollment_date: string
+          status: string
+          grade?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          student_id?: string
+          course_id?: number
+          enrollment_date?: string
+          status?: string
+          grade?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      withdrawals: {
+        Row: {
+          id: number
+          student_id: string
+          course_id: number
+          withdrawal_date: string
+          reason: string | null
+          status: string
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          student_id: string
+          course_id: number
+          withdrawal_date: string
+          reason?: string | null
+          status: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          student_id?: string
+          course_id?: number
+          withdrawal_date?: string
+          reason?: string | null
+          status?: string
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      scholarships: {
+        Row: {
+          id: number
+          student_id: string
+          name: string
+          amount: number
+          start_date: string
+          end_date: string
+          status: string
+          description: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          student_id: string
+          name: string
+          amount: number
+          start_date: string
+          end_date: string
+          status: string
+          description?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          student_id?: string
+          name?: string
+          amount?: number
+          start_date?: string
+          end_date?: string
+          status?: string
+          description?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      allowances: {
+        Row: {
+          id: number
+          student_id: string
+          type: string
+          amount: number
+          payment_date: string
+          status: string
+          description: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          student_id: string
+          type: string
+          amount: number
+          payment_date: string
+          status: string
+          description?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          student_id?: string
+          type?: string
+          amount?: number
+          payment_date?: string
+          status?: string
+          description?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
     }
   }
 }
